@@ -1,0 +1,275 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Atlas",
+    "description": "Essa é uma documentação sobre o Atlas API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": ["users"],
+        "summary": "Cria um novo usuario",
+        "description": "Executa a criação de um usuário e retorna ele.",
+        "requestBody": {
+          "description": "Campos obrigatorios para a criação de um novo usuário",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "email": { "type": "string" }
+                },
+                "example": {
+                  "name": "Jhon doe",
+                  "email": "jhondoe@gmail.com"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Operação realizada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {"type": "string", "format": "uuid"},
+                    "name": {"type": "string"},
+                    "email": {"type": "string"},
+                    "admin": {"type": "boolean"},
+                    "created_at": {"type": "string", "format": "date-time"},
+                    "updated_at": {"type": "string", "format": "date-time"}
+                  },
+                  "example": {
+                    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "name": "Jhon doe",
+                    "email": "jhondoe@gmail.com",
+                    "admin": false,
+                    "created_at": "2021-04-03T23:53:24.446Z",
+                    "updated_at": "2021-04-03T23:53:24.446Z"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "email já está sendo utilizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {"type": "string"}
+                  },
+                  "example": {
+                    "error": "This email is already in use."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["users"],
+        "summary": "Lista todos os usuarios",
+        "description": "Lista todos os usuarios, apenas admins podem acessar essa funcionalidade",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operação realizada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "properties": {
+                    "id": {"type": "string", "format": "uuid"},
+                    "name": {"type": "string"},
+                    "email": {"type": "string"},
+                    "admin": {"type": "boolean"},
+                    "created_at": {"type": "string", "format": "date-time"},
+                    "updated_at": {"type": "string", "format": "date-time"}   
+        
+                  },
+                  "example": [
+                    {
+                      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                      "name": "Jhon doe",
+                      "email": "jhondoe@gmail.com",
+                      "admin": false,
+                      "created_at": "2021-04-03T23:53:24.446Z",
+                      "updated_at": "2021-04-03T23:53:24.446Z"
+                    },
+                    {
+                      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                      "name": "Jhon doe",
+                      "email": "jhondoe@gmail.com",
+                      "admin": false,
+                      "created_at": "2021-04-03T23:53:24.446Z",
+                      "updated_at": "2021-04-03T23:53:24.446Z"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Usuário sem permissao ou Usuário não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {"type": "string"}
+                  },
+                  "example": {
+                    "error": "You are not admin, you cant do this operation"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Retorna um usuário especifico",
+        "parameters": [
+          {
+            "name": "user_id",
+            "description": "Id do usuário",
+            "in": "path",
+            "required": true,
+            "schema": {       
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operação realizada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {"type": "string", "format": "uuid"},
+                    "name": {"type": "string"},
+                    "email": {"type": "string"},
+                    "admin": {"type": "boolean"},
+                    "created_at": {"type": "string", "format": "date-time"},
+                    "updated_at": {"type": "string", "format": "date-time"}
+                  },
+                  "example": {
+                    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "name": "Jhon doe",
+                    "email": "jhondoe@gmail.com",
+                    "admin": false,
+                    "created_at": "2021-04-03T23:53:24.446Z",
+                    "updated_at": "2021-04-03T23:53:24.446Z"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Usuário não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": { "type": "string" }
+                  },
+                  "example": {
+                    "error": "User not found."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}/admin": {
+      "patch": {
+        "tags": ["users"],
+        "summary": "Torna um usuário em admin",
+        "parameters": [
+          {
+            "name": "user_id",
+            "description": "Id do usuário",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operação realizada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {"type": "string", "format": "uuid"},
+                    "name": {"type": "string"},
+                    "email": {"type": "string"},
+                    "admin": {"type": "boolean"},
+                    "created_at": {"type": "string", "format": "date-time"},
+                    "updated_at": {"type": "string", "format": "date-time"}
+                  },
+                  "example": {
+                    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "name": "Jhon doe",
+                    "email": "jhondoe@gmail.com",
+                    "admin": true,
+                    "created_at": "2021-04-03T23:53:24.446Z",
+                    "updated_at": "2021-04-03T23:53:24.446Z"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": { "type": "string" }
+                  },
+                  "example": {
+                    "error": "User not found"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -11,8 +11,8 @@ class ListAllUsersUseCase {
   execute({ user_id }: IRequest): User[] {
     const user = this.usersRepository.findById(user_id);
 
-    switch (user && user.admin) {
-      case user === undefined:
+    switch (!!user) {
+      case false:
         throw new Error('User not found');
         break;
       case user.admin === false:
